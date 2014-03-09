@@ -12,10 +12,6 @@ import (
 	"github.com/codegangsta/martini"
 )
 
-func canDeref(val reflect.Value) bool {
-	return val.Kind() == reflect.Interface || val.Kind() == reflect.Ptr
-}
-
 // ReturnHandler is a service that is called when a route handler returns
 // something. The ReturnHandler is responsible for writing to the
 // ResponseWriter based on the values that are passed into this function.
@@ -33,9 +29,6 @@ func ReturnHandler() martini.ReturnHandler {
 			responseVal = vals[1]
 		} else if len(vals) > 0 {
 			responseVal = vals[0]
-		}
-		if canDeref(responseVal) {
-			responseVal = responseVal.Elem()
 		}
 
 		if strings.Contains(acceptType, "json") {
